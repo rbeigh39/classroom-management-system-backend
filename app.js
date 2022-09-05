@@ -11,6 +11,7 @@ const userRouter = require("./routes/userRoutes");
 const notificationRouter = require("./routes/notificationRoutes");
 const resourceRouter = require("./routes/resourceRoutes");
 const postRouter = require("./routes/postRouter");
+const commentRouter = require("./routes/commentRouter");
 
 const app = express();
 // app.use((req, res, next) => {
@@ -54,6 +55,7 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/notifications", notificationRouter);
 app.use("/api/v1/resources", resourceRouter);
 app.use("/api/v1/posts", postRouter);
+app.use("/api/v1/comments", commentRouter);
 
 app.all("*", (req, res, next) => {
   return next(
