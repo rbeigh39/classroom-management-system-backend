@@ -1,46 +1,83 @@
-const Notification = require('../models/notificationModel');
-const catchAsync = require('../utilities/catchAsync');
-const AppError = require('../utilities/appError');
+const Notification = require("../models/notificationModel");
+const catchAsync = require("../utilities/catchAsync");
+const AppError = require("../utilities/appError");
 
 const createNotification = catchAsync(async (req, res, next) => {
-    const notification = await Notification.create(req.body);
+  const notification = await Notification.create(req.body);
 
-    res.status(201).json({
-        status: 'success',
-        message: 'Notification successfully created',
-        data: {
-            notification
-        }
-    })
+  res.status(201).json({
+    status: "success",
+    message: "Notification successfully created",
+    data: {
+      notification,
+    },
+  });
 });
 
 const getAllNotifications = catchAsync(async (req, res, next) => {
-    const notifications = await Notification.find();
+  const notifications = await Notification.find();
 
-    res.status(200).json({
-        status: 'success',
-        data: {
-            notifications
-        }
-    })
-})
+  res.status(200).json({
+    status: "success",
+    data: {
+      notifications,
+    },
+  });
+});
+
+const getNotification = catchAsync(async (req, res, next) => {
+  const notification = await Notification.findById(req.params.id);
+
+  if (!notification)
+    return next(new AppError("No notification found with that ID", 400));
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      notification,
+    },
+  });
+});
 
 const updateNotification = catchAsync(async (req, res, next) => {
-    const notification = await Notification.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-    });
+  const notification = await Notification.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
-    res.status(200).json({
-        status: 'success',
-        data: {
-            notification
-        }
-    })
-})
+  res.status(200).json({
+    status: "success",
+    data: {
+      notification,
+    },
+  });
+});
+
+const deleteNotification = catchAsync(async (req, res, next) => {
+  const deletedNotification = await Notification.findByIdAndDelete(
+    req.params.id
+  );
+
+  if (!deletedNotification)
+    return next(new AppError("No notification found with that ID", 400));
+
+  res.status(204).json({
+    status: "success",
+    message: "deleted",
+    data: {
+      notification: deletedNotification,
+    },
+  });
+});
 
 module.exports = {
-    createNotification,
-    getAllNotifications,
-    updateNotification
-}
+  createNotification,
+  getAllNotifications,
+  getNotification,
+  updateNotification,
+  deleteNotification,
+};

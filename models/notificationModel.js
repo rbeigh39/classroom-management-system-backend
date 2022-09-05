@@ -23,6 +23,9 @@ const notificationSchema = new mongoose.Schema({
     enum: ["general", "important", "critical"],
     default: "general",
   },
+  link: {
+    type: String,
+  },
 });
 
 const Notification = mongoose.model("Notification", notificationSchema);

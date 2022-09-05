@@ -14,6 +14,12 @@ router
     resourceController.createResource
   );
 
-router.route("/:fileName").get(resourceController.downloadResource);
+router
+  .route("/:id")
+  .get(resourceController.getResource)
+  .patch(authController.protect, resourceController.updateResource)
+  .delete(authController.protect, resourceController.deleteResource);
+
+router.route("/download/:fileName").get(resourceController.downloadResource);
 
 module.exports = router;
