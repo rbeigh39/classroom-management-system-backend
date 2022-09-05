@@ -5,20 +5,20 @@ const notificationSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  type: {
+  category: {
     type: String,
     enum: ["notification", "notice"],
     default: "notification",
   },
-  notificationTitle: {
+  title: {
     type: String,
     required: [true, "Please enter the notificationTitle"],
   },
-  notificationMessage: {
+  message: {
     type: String,
     required: [true, "Please enter the notificationMessage"],
   },
-  notificationType: {
+  type: {
     type: String,
     enum: ["general", "important", "critical"],
     default: "general",

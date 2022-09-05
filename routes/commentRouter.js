@@ -4,9 +4,6 @@ const commentController = require("../controllers/commentController");
 
 const router = express.Router();
 
-// POST /api/v1/comments/098234098lksjdf02983
-// GET  /api/v1/comments/098234098lksjdf02983
-
 router.route("/").get(commentController.getAllComments);
 
 router
