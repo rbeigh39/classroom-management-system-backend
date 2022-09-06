@@ -1,6 +1,7 @@
 const Notification = require("../models/notificationModel");
 const catchAsync = require("../utilities/catchAsync");
 const AppError = require("../utilities/appError");
+const APIFeatures = require("../utilities/apiFeatures");
 
 const createNotification = catchAsync(async (req, res, next) => {
   const notification = await Notification.create(req.body);
@@ -15,10 +16,17 @@ const createNotification = catchAsync(async (req, res, next) => {
 });
 
 const getAllNotifications = catchAsync(async (req, res, next) => {
-  const notifications = await Notification.find();
+  const features = new APIFeatures(Notification.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const notifications = await features.query;
 
   res.status(200).json({
     status: "success",
+    results: notifications.length,
     data: {
       notifications,
     },

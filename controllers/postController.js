@@ -1,4 +1,5 @@
 const multer = require("multer");
+const APIFeatures = require("../utilities/apiFeatures");
 const catchAsync = require("../utilities/catchAsync");
 const AppError = require("../utilities/appError");
 const Post = require("../models/postModel");
@@ -77,10 +78,17 @@ const getPost = catchAsync(async (req, res, next) => {
 });
 
 const getAllPosts = catchAsync(async (req, res, next) => {
-  const posts = await Post.find();
+  const features = new APIFeatures(Post.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const posts = await features.query;
 
   res.status(200).json({
     status: "success",
+    results: posts.length,
     data: {
       posts,
     },
