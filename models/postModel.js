@@ -38,6 +38,14 @@ postSchema.virtual('likes', {
   localField: '_id',
 });
 
+postSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'likes',
+    select: ['-__v'],
+  });
+  next();
+});
+
 // postSchema.virtual('heya').get(function () {
 //   return 'hello';
 // });
