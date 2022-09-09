@@ -120,7 +120,7 @@ const updatePost = catchAsync(async (req, res, next) => {
     status: 'success',
     message: 'post updated',
     data: {
-      post,
+      post: updatedPost,
     },
   });
 });
