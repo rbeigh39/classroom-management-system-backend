@@ -84,7 +84,10 @@ const getAllPosts = catchAsync(async (req, res, next) => {
     .limitFields()
     .paginate();
 
-  const posts = await features.query;
+  const posts = await features.query.populate({
+    path: 'author',
+    select: ['name', 'photo'],
+  });
 
   res.status(200).json({
     status: 'success',

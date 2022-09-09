@@ -10,7 +10,7 @@ const likeSchema = new mongoose.Schema({
   post: {
     type: mongoose.Schema.ObjectId,
     ref: 'Post',
-    requierd: [true, 'A like must belong to a Post'],
+    required: [true, 'A like must belong to a Post'],
   },
 });
 
