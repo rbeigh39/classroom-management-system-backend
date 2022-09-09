@@ -1,34 +1,29 @@
-const express = require("express");
-const notificationController = require("../controllers/notificationController");
-const authController = require("../controllers/authController");
+const express = require('express');
+const notificationController = require('../controllers/notificationController');
+const authController = require('../controllers/authController');
 
 const router = express.Router();
 
+// Protect all routes after this middleware:
+router.use(authController.protect);
+
 router
-  .route("/")
+  .route('/')
   .get(notificationController.getAllNotifications)
   .post(
-    authController.protect,
-    authController.restrictTo("admin"),
+    authController.restrictTo('admin', 'cr', 'faculty'),
     notificationController.createNotification
-  )
-  .patch(
-    authController.protect,
-    authController.restrictTo("admin"),
-    notificationController.updateNotification
   );
 
 router
-  .route("/:id")
+  .route('/:id')
   .get(notificationController.getNotification)
   .patch(
-    authController.protect,
-    authController.restrictTo("admin"),
+    authController.restrictTo('admin', 'cr', 'faculty'),
     notificationController.updateNotification
   )
   .delete(
-    authController.protect,
-    authController.restrictTo("admin"),
+    authController.restrictTo('admin', 'cr', 'faculty'),
     notificationController.deleteNotification
   );
 

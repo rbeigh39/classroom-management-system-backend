@@ -12,6 +12,10 @@ const likeSchema = new mongoose.Schema({
     ref: 'Post',
     required: [true, 'A like must belong to a Post'],
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 likeSchema.index({ post: 1, user: 1 }, { unique: true });

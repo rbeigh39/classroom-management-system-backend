@@ -1,12 +1,14 @@
-const express = require("express");
-const authController = require("../controllers/authController");
-const likeController = require("../controllers/likeController");
+const express = require('express');
+const authController = require('../controllers/authController');
+const likeController = require('../controllers/likeController');
 
 const router = express.Router();
 
+router.use(authController.protect);
+
 router
-  .route("/")
-  .post(authController.protect, likeController.createLike)
-  .delete(authController.protect, likeController.deleteLike);
+  .route('/')
+  .post(likeController.createLike)
+  .delete(likeController.deleteLike);
 
 module.exports = router;

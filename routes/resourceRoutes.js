@@ -1,25 +1,27 @@
-const express = require("express");
-const resourceController = require("../controllers/resourceController");
-const authController = require("../controllers/authController");
+const express = require('express');
+const resourceController = require('../controllers/resourceController');
+const authController = require('../controllers/authController');
 
 const router = express.Router();
 
+// Protect all routes after this middleware:
+router.use(authController.protect);
+
 router
-  .route("/")
+  .route('/')
   .get(resourceController.getAllResources)
   .post(
-    authController.protect,
-    authController.restrictTo("admin"),
+    authController.restrictTo('admin', 'cr', 'faculty'),
     resourceController.uploadResource,
     resourceController.createResource
   );
 
 router
-  .route("/:id")
+  .route('/:id')
   .get(resourceController.getResource)
-  .patch(authController.protect, resourceController.updateResource)
-  .delete(authController.protect, resourceController.deleteResource);
+  .patch(resourceController.updateResource)
+  .delete(resourceController.deleteResource);
 
-router.route("/download/:fileName").get(resourceController.downloadResource);
+router.route('/download/:fileName').get(resourceController.downloadResource);
 
 module.exports = router;

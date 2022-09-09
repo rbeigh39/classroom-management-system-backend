@@ -1,26 +1,25 @@
-const express = require("express");
-const authController = require("../controllers/authController");
-const postController = require("../controllers/postController");
+const express = require('express');
+const authController = require('../controllers/authController');
+const postController = require('../controllers/postController');
 
 const router = express.Router();
 
+// Protect all routes after this middleware:
+router.use(authController.protect);
+
 router
-  .route("/")
+  .route('/')
   .get(postController.getAllPosts)
   .post(
-    authController.protect,
+    authController.restrictTo('admin', 'cr', 'faculty'),
     postController.uploadPostPhoto,
     postController.createPost
   );
 
 router
-  .route("/:id")
+  .route('/:id')
   .get(postController.getPost)
-  .patch(
-    authController.protect,
-    postController.uploadPostPhoto,
-    postController.updatePost
-  )
+  .patch(postController.uploadPostPhoto, postController.updatePost)
   .delete(postController.deletePost);
 
 module.exports = router;

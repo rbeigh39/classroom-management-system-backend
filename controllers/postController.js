@@ -126,9 +126,13 @@ const updatePost = catchAsync(async (req, res, next) => {
 });
 
 const deletePost = catchAsync(async (req, res, next) => {
-  const post = await Post.findByIdAndDelete(req.params.id);
+  const post = await Post.findOneAndDelete({
+    _id: req.params.id,
+    author: req.user._id,
+  });
 
-  if (!post) return next(new AppError('No Post found with that Id.', 400));
+  if (!post)
+    return next(new AppError("You don't have a post with that ID.", 400));
 
   res.status(204).json({
     status: 'success',
