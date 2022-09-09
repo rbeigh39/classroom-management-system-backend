@@ -1,11 +1,11 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema(
   {
     author: {
       type: mongoose.Schema.ObjectId,
-      ref: "User",
-      required: [true, "A post must have an author"],
+      ref: 'User',
+      required: [true, 'A post must have an author'],
     },
     message: {
       type: String,
@@ -17,6 +17,14 @@ const postSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    noOfLikes: {
+      type: Number,
+      default: 0,
+    },
+    noOfComments: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     toJSON: { virtuals: true },
@@ -24,6 +32,28 @@ const postSchema = new mongoose.Schema(
   }
 );
 
-const Post = mongoose.model("Post", postSchema);
+postSchema.virtual('likes', {
+  ref: 'Like',
+  foreignField: 'post',
+  localField: '_id',
+});
+
+// postSchema.virtual('heya').get(function () {
+//   return 'hello';
+// });
+// postSchema.virtual("isLikedByMe").get(async function () {
+//   // this points to the current document
+//   const like = await Like.findOne({
+//     post: this._id,
+//   });
+
+//   if (!like) {
+//     return "false";
+//   }
+
+//   return "true";
+// });
+
+const Post = mongoose.model('Post', postSchema);
 
 module.exports = Post;

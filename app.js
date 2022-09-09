@@ -1,17 +1,18 @@
-const express = require("express");
-const morgan = require("morgan");
-const rateLimit = require("express-rate-limit");
-const helmet = require("helmet");
-const compression = require("compression");
-const cors = require("cors");
+const express = require('express');
+const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const compression = require('compression');
+const cors = require('cors');
 
-const globalErrorHandler = require("./controllers/errorController");
-const AppError = require("./utilities/appError");
-const userRouter = require("./routes/userRoutes");
-const notificationRouter = require("./routes/notificationRoutes");
-const resourceRouter = require("./routes/resourceRoutes");
-const postRouter = require("./routes/postRouter");
-const commentRouter = require("./routes/commentRouter");
+const globalErrorHandler = require('./controllers/errorController');
+const AppError = require('./utilities/appError');
+const userRouter = require('./routes/userRoutes');
+const notificationRouter = require('./routes/notificationRoutes');
+const resourceRouter = require('./routes/resourceRoutes');
+const postRouter = require('./routes/postRouter');
+const commentRouter = require('./routes/commentRouter');
+const likeRouter = require('./routes/likeRouter');
 
 const app = express();
 // app.use((req, res, next) => {
@@ -27,23 +28,23 @@ const app = express();
 //CORS
 app.use(cors());
 
-app.options("*", cors());
+app.options('*', cors());
 // Development Request logging
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
 }
 
 // Limit requests from same IP
 const limiter = rateLimit({
   max: 700,
   windowMs: 60000,
-  message: "Too many requests from this IP, Please try again in one minute!",
+  message: 'Too many requests from this IP, Please try again in one minute!',
 });
 
-app.use("/api", limiter);
+app.use('/api', limiter);
 
 // Body Parser - reading data from the body into req.body
-app.use(express.json({ limit: "10KB" }));
+app.use(express.json({ limit: '10KB' }));
 
 // Serving Static Files
 app.use(express.static(`${__dirname}/public`));
@@ -51,13 +52,14 @@ app.use(express.static(`${__dirname}/public`));
 app.use(compression());
 
 // ROUTE HANDLERS ---
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/notifications", notificationRouter);
-app.use("/api/v1/resources", resourceRouter);
-app.use("/api/v1/posts", postRouter);
-app.use("/api/v1/comments", commentRouter);
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/notifications', notificationRouter);
+app.use('/api/v1/resources', resourceRouter);
+app.use('/api/v1/posts', postRouter);
+app.use('/api/v1/comments', commentRouter);
+app.use('/api/v1/likes', likeRouter);
 
-app.all("*", (req, res, next) => {
+app.all('*', (req, res, next) => {
   return next(
     new AppError(`Can't find ${req.originalUrl} on this server!`, 404)
   );
