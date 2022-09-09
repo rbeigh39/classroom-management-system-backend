@@ -109,8 +109,6 @@ const deleteComment = catchAsync(async (req, res, next) => {
 
   const deletedComment = await Comment.findByIdAndDelete(req.params.commentId);
 
-  console.log('this is the deleted comment: ', deletedComment);
-
   await Post.findByIdAndUpdate(deletedComment.post, {
     $inc: { noOfComments: -1 },
   });
