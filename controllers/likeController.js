@@ -14,6 +14,10 @@ const createLike = catchAsync(async (req, res, next) => {
     post: postID,
   });
 
+  await Post.findByIdAndUpdate(postID, {
+    $inc: { noOfLikes: 1 },
+  });
+
   res.status(201).json({
     status: 'success',
     message: 'Like Created!',
@@ -35,6 +39,10 @@ const deleteLike = catchAsync(async (req, res, next) => {
 
   if (!deletedLike)
     return next(new AppError("you haven't liked this post!"), 400);
+
+  await Post.findByIdAndUpdate(req.body.post, {
+    $inc: { noOfLikes: -1 },
+  });
 
   res.status(204).json({
     status: 'success',
