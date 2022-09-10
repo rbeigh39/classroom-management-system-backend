@@ -26,7 +26,12 @@ const app = express();
 // app.use(helmet());
 
 //CORS
-app.use(cors());
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
 app.options('*', cors());
 // Development Request logging
