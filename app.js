@@ -4,6 +4,7 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const compression = require('compression');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 
 const globalErrorHandler = require('./controllers/errorController');
 const AppError = require('./utilities/appError');
@@ -50,6 +51,9 @@ app.use('/api', limiter);
 
 // Body Parser - reading data from the body into req.body
 app.use(express.json({ limit: '10KB' }));
+
+// Cookie Parser
+app.use(cookieParser());
 
 // Serving Static Files
 app.use(express.static(`${__dirname}/public`));
