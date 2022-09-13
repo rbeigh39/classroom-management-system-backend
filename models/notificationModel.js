@@ -12,21 +12,25 @@ const notificationSchema = new mongoose.Schema({
   },
   title: {
     type: String,
-    required: [true, 'Please enter the notificationTitle'],
+    required: [true, 'Please enter the notification title (title)'],
   },
   message: {
     type: String,
-    required: [true, 'Please enter the notificationMessage'],
+    required: [true, 'Please enter the notification message (message)'],
   },
   type: {
     type: String,
     enum: ['general', 'important', 'critical'],
     default: 'general',
+    required: [
+      true,
+      'A notification must have a type (general, important, critical)',
+    ],
   },
   author: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    required: [true, 'A notification must belong to a user!'],
+    required: [true, 'A notification must belong to a user! (login first)'],
   },
   link: {
     type: String,

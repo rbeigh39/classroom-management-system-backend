@@ -9,6 +9,7 @@ const createNotification = catchAsync(async (req, res, next) => {
     message: req.body.message,
     author: req.user._id,
     link: req.body.link,
+    type: req.body.type,
   });
 
   res.status(201).json({
