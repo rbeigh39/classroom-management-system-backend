@@ -42,7 +42,7 @@ const createPost = catchAsync(async (req, res, next) => {
 
   res.status(201).json({
     status: 'success',
-    message: 'created',
+    message: 'Post successfully created!',
     data: {
       newPost,
     },

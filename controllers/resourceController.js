@@ -86,8 +86,6 @@ const getResource = catchAsync(async (req, res, next) => {
 });
 
 const createResource = catchAsync(async (req, res, next) => {
-  console.log('this is the resource body: ', req.body.type);
-
   if (!req.body.type === 'link' || !req.body.type === 'attachment')
     return next(new AppError('Please select a resource type!'));
 
