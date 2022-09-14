@@ -6,6 +6,11 @@ const resourceSchema = new mongoose.Schema({
     required: [true, 'Please specify the title for the resource'],
     trim: true,
   },
+  type: {
+    type: String,
+    required: [true, 'Please specify the resource type (link, attachment).'],
+    enum: ['link', 'attachment'],
+  },
   fileName: {
     type: String,
   },

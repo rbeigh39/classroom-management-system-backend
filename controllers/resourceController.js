@@ -1,8 +1,8 @@
 const multer = require('multer');
-const authController = require('./authController');
 const AppError = require('../utilities/appError');
 const catchAsync = require('../utilities/catchAsync');
 const Resource = require('../models/resourceModel');
+const APIFeatures = require('../utilities/apiFeatures');
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -40,7 +40,13 @@ const upload = multer({
 const uploadResource = upload.single('file');
 
 const getAllResources = catchAsync(async (req, res, next) => {
-  const resources = await Resource.find();
+  const features = new APIFeatures(Resource.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const resources = await features.query;
 
   res.status(200).json({
     status: 'success',
@@ -80,14 +86,30 @@ const getResource = catchAsync(async (req, res, next) => {
 });
 
 const createResource = catchAsync(async (req, res, next) => {
-  if (!req.file) return next(new AppError('Please attach a file!', 400));
-  req.body.fileName = req.file.filename;
+  console.log('this is the resource body: ', req.body.type);
+
+  if (!req.body.type === 'link' || !req.body.type === 'attachment')
+    return next(new AppError('Please select a resource type!'));
+
+  if (req.body.type === 'attachment' && !req.file)
+    return next(new AppError('Please attach a file!', 400));
+
+  if (req.body.type === 'attachment ') req.body.fileName = req.file.filename;
+
+  if (
+    req.body.type === 'link' &&
+    !req.body.link &&
+    req.body.link.replace(/\s+/g, '') === ''
+  )
+    return next(new AppError('Please attach a link!'));
 
   const resource = await Resource.create({
+    type: req.body.type,
     title: req.body.title,
     description: req.body.description,
     fileName: req.body.fileName,
     author: req.user._id,
+    link: req.body.link,
   });
 
   res.status(200).json({
