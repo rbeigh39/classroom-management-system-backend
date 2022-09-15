@@ -14,6 +14,7 @@ const resourceRouter = require('./routes/resourceRoutes');
 const postRouter = require('./routes/postRouter');
 const commentRouter = require('./routes/commentRouter');
 const likeRouter = require('./routes/likeRouter');
+const timeTableRouter = require('./routes/timeTableRouter');
 
 const app = express();
 // app.use((req, res, next) => {
@@ -60,6 +61,11 @@ app.use(express.static(`${__dirname}/public`));
 
 app.use(compression());
 
+// app.use((req, res, next) => {
+//   console.log('this is the req body', req.body);
+//   next();
+// });
+
 // ROUTE HANDLERS ---
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/notifications', notificationRouter);
@@ -67,6 +73,7 @@ app.use('/api/v1/resources', resourceRouter);
 app.use('/api/v1/posts', postRouter);
 app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/likes', likeRouter);
+app.use('/api/v1/timeTable', timeTableRouter);
 
 app.all('*', (req, res, next) => {
   return next(
