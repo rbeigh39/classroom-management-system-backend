@@ -4,7 +4,7 @@ const timeTableSchema = new mongoose.Schema(
   {
     dayOfWeek: {
       type: String,
-      // required: [true, 'A time-table should belong to a day of a week.'],
+      required: [true, 'A time-table should belong to a day of a week.'],
       enum: [
         'monday',
         'tuesday',
