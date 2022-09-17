@@ -24,11 +24,13 @@ const getTimeTable = catchAsync(async (req, res, next) => {
     'friday',
     'saturday',
   ];
+
   const currentDayIndex = new Date(Date.now()).getDay();
   console.log('this is the target: ', days[currentDayIndex]);
 
   const timeTable = await TimeTable.find({
     dayOfWeek: days[currentDayIndex],
+    // dayOfWeek: 'sunday',
   });
 
   res.status(200).json({
