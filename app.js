@@ -15,6 +15,7 @@ const postRouter = require('./routes/postRouter');
 const commentRouter = require('./routes/commentRouter');
 const likeRouter = require('./routes/likeRouter');
 const timeTableRouter = require('./routes/timeTableRouter');
+const messageRouter = require('./routes/messageRouter');
 
 const app = express();
 // app.use((req, res, next) => {
@@ -74,6 +75,7 @@ app.use('/api/v1/posts', postRouter);
 app.use('/api/v1/comments', commentRouter);
 app.use('/api/v1/likes', likeRouter);
 app.use('/api/v1/timeTable', timeTableRouter);
+app.use('/api/v1/messages', messageRouter);
 
 app.all('*', (req, res, next) => {
   return next(

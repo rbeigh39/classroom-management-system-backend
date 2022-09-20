@@ -46,22 +46,6 @@ postSchema.pre(/^find/, function (next) {
   next();
 });
 
-// postSchema.virtual('heya').get(function () {
-//   return 'hello';
-// });
-// postSchema.virtual("isLikedByMe").get(async function () {
-//   // this points to the current document
-//   const like = await Like.findOne({
-//     post: this._id,
-//   });
-
-//   if (!like) {
-//     return "false";
-//   }
-
-//   return "true";
-// });
-
 const Post = mongoose.model('Post', postSchema);
 
 module.exports = Post;
