@@ -29,18 +29,22 @@ const app = express();
 // app.use(helmet());
 
 //CORS
-app.use(
-  cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: ['http://localhost:3000', 'http://127.0.0.1:3000', '*'],
+//     credentials: true,
+//   })
+// );
 
-app.options('*', cors());
+// app.options('*', cors());
+app.use(cors());
+
 // Development Request logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+app.use(helmet());
 
 // Limit requests from same IP
 const limiter = rateLimit({
