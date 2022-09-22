@@ -1,5 +1,6 @@
 const catchAsync = require('../utilities/catchAsync');
 const AppError = require('../utilities/appError');
+const APIFeatures = require('../utilities/apiFeatures');
 const Comment = require('../models/commentModel');
 const Post = require('../models/postModel');
 
@@ -30,7 +31,13 @@ const createComment = catchAsync(async (req, res, next) => {
 });
 
 const getAllComments = catchAsync(async (req, res, next) => {
-  const comments = await Comment.find();
+  const features = new APIFeatures(Comment.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const comments = await features.query;
 
   res.status(200).json({
     status: 'success',
