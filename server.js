@@ -42,13 +42,15 @@ const server = app.listen(port, () => {
   console.log(`Starting application on port ${port}`);
 });
 
-const httpsServer = https.createServer(
-  {
-    key: fs.readFileSync(`${__dirname}/cert/key.pem`, 'utf-8'),
-    cert: fs.readFileSync(`${__dirname}/cert/cert.pem`),
-  },
-  app
-);
+const httpsServer =
+  process.env.NODE_ENV === 'development' &&
+  https.createServer(
+    {
+      key: fs.readFileSync(`${__dirname}/cert/key.pem`, 'utf-8'),
+      cert: fs.readFileSync(`${__dirname}/cert/cert.pem`),
+    },
+    app
+  );
 
 if (process.env.NODE_ENV === 'development') {
   httpsServer.listen(httpsPort, () => {
