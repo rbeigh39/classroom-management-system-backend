@@ -29,15 +29,14 @@ const app = express();
 // app.use(helmet());
 
 //CORS
-// app.use(
-//   cors({
-//     origin: ['http://localhost:3000', 'http://127.0.0.1:3000', '*'],
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', '*'],
+    credentials: true,
+  })
+);
 
-// app.options('*', cors());
-app.use(cors());
+app.options('*', cors());
 
 // Development Request logging
 if (process.env.NODE_ENV === 'development') {
