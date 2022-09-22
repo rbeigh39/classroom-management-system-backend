@@ -17,6 +17,8 @@ const createComment = catchAsync(async (req, res, next) => {
     comment: req.body.comment,
   });
 
+  const new_comment = await Comment.populate(newComment, { path: 'author' });
+
   await Post.findByIdAndUpdate(req.params.postId, {
     $inc: { noOfComments: 1 },
   });
@@ -25,7 +27,7 @@ const createComment = catchAsync(async (req, res, next) => {
     status: 'success',
     message: 'post created',
     data: {
-      newComment,
+      newComment: new_comment,
     },
   });
 });
@@ -63,9 +65,16 @@ const getComment = catchAsync(async (req, res, next) => {
 });
 
 const getPostComments = catchAsync(async (req, res, next) => {
-  const comments = await Comment.find({
-    post: req.params.postId,
-  });
+  const features = new APIFeatures(
+    Comment.find({ post: req.params.postId }),
+    req.query
+  )
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const comments = await features.query;
 
   res.status(200).json({
     status: 'success',
