@@ -20,7 +20,7 @@ let conUrl = process.env.DATABASE_CLOUD;
 conUrl = conUrl.replace('PASSWORD', process.env.DATABASE_PASSWORD);
 
 mongoose
-  .connect('mongodb://127.0.0.1:27017/pubble', {
+  .connect(conUrl, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
@@ -50,9 +50,11 @@ const httpsServer = https.createServer(
   app
 );
 
-httpsServer.listen(httpsPort, () => {
-  console.log(`https server running on port ${httpsPort}`);
-});
+if (process.env.NODE_ENV === 'development') {
+  httpsServer.listen(httpsPort, () => {
+    console.log(`https server running on port ${httpsPort}`);
+  });
+}
 
 process.on('unhandledRejection', (err) => {
   console.log('unhandled rejection... Exiting application');
