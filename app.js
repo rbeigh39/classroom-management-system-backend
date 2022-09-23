@@ -65,10 +65,11 @@ app.use(express.static(`${__dirname}/public`));
 
 app.use(compression());
 
-// app.use((req, res, next) => {
-//   console.log('this is the req body', req.body);
-//   next();
-// });
+app.use((req, res, next) => {
+  console.log('this is the req header', res.header());
+  res.set('Access-Control-Allow-Origin', '*');
+  next();
+});
 
 // ROUTE HANDLERS ---
 app.use('/api/v1/users', userRouter);
