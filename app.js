@@ -31,7 +31,12 @@ const app = express();
 //CORS
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'http://127.0.0.1:3000', '*'],
+    origin: [
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+      'http://192.168.29.233',
+      '*',
+    ],
     credentials: true,
   })
 );
@@ -65,11 +70,11 @@ app.use(express.static(`${__dirname}/public`));
 
 app.use(compression());
 
-app.use((req, res, next) => {
-  console.log('this is the req header', res.header());
-  res.set('Access-Control-Allow-Origin', '*');
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log('this is the req header', res.header());
+//   res.set('Access-Control-Allow-Origin', '*');
+//   next();
+// });
 
 // ROUTE HANDLERS ---
 app.use('/api/v1/users', userRouter);
