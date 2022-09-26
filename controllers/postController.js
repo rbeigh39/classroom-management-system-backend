@@ -26,6 +26,21 @@ const multerStorage = multer.diskStorage({
   },
 });
 
+const multerFilter = (req, file, cb) => {
+  if (!file.mimetype.startsWith('image'))
+    return cb(new AppError('Not an image, please upload only images!', 400));
+
+  cb(null, true);
+};
+
+const upload = multer({
+  dest: 'public/img/posts',
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+const uploadPostPhoto = upload.single('image');
+
 const createPost = catchAsync(async (req, res, next) => {
   let fileName = undefined;
 
@@ -48,21 +63,6 @@ const createPost = catchAsync(async (req, res, next) => {
     },
   });
 });
-
-const multerFilter = (req, file, cb) => {
-  if (!file.mimetype.startsWith('image'))
-    return cb(new AppError('Not an image, please upload only images!', 400));
-
-  cb(null, true);
-};
-
-const upload = multer({
-  dest: 'public/img/posts',
-  storage: multerStorage,
-  fileFilter: multerFilter,
-});
-
-const uploadPostPhoto = upload.single('image');
 
 const getPost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);

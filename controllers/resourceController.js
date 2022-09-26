@@ -12,10 +12,8 @@ const multerStorage = multer.diskStorage({
     let ext;
 
     if (file.mimetype.includes('.document')) {
-      console.log('one');
       ext = 'docx';
     } else if (file.mimetype.includes('.presentation')) {
-      console.log('two');
       ext = 'pptx';
     } else {
       ext = file.mimetype.split('/')[1];
@@ -29,7 +27,7 @@ const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image')) {
     cb(null, true);
   } else {
-    cb(new appError('Not an image. Plesase upload only images', 400));
+    cb(new AppError('Not an image. Plesase upload only images', 400));
   }
 };
 
@@ -86,6 +84,8 @@ const getResource = catchAsync(async (req, res, next) => {
 });
 
 const createResource = catchAsync(async (req, res, next) => {
+  let fileName = undefined;
+
   if (!req.body.type === 'link' || !req.body.type === 'attachment')
     return next(new AppError('Please select a resource type!'));
 
@@ -101,11 +101,13 @@ const createResource = catchAsync(async (req, res, next) => {
   )
     return next(new AppError('Please attach a link!'));
 
+  if (req.file) fileName = req.file.filename;
+
   const resource = await Resource.create({
     type: req.body.type,
     title: req.body.title,
     description: req.body.description,
-    fileName: req.body.fileName,
+    fileName,
     author: req.user._id,
     link: req.body.link,
   });
