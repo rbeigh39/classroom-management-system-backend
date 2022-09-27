@@ -2,6 +2,7 @@ const Like = require('../models/likeModel');
 const Post = require('../models/postModel');
 const catchAsync = require('../utilities/catchAsync');
 const AppError = require('../utilities/appError');
+const APIFeatures = require('../utilities/apiFeatures');
 
 const createLike = catchAsync(async (req, res, next) => {
   const postID = req.body.post;
@@ -53,8 +54,40 @@ const deleteLike = catchAsync(async (req, res, next) => {
   });
 });
 
+const getUserLikedPosts = catchAsync(async (req, res, next) => {
+  const features = new APIFeatures(
+    Like.find({
+      user: req.user._id,
+    }).populate({
+      path: 'post',
+      // select: { post: 1 },
+      populate: {
+        path: 'author',
+        model: 'User',
+        select: ['name', 'photo'],
+      },
+    }),
+    req.query
+  )
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const posts = await features.query;
+
+  res.status(200).json({
+    status: 'success',
+    results: posts.length,
+    data: {
+      posts,
+    },
+  });
+});
+
 module.exports = {
   createLike,
   getIfUserHasLiked,
   deleteLike,
+  getUserLikedPosts,
 };

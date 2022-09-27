@@ -141,6 +141,29 @@ const deleteComment = catchAsync(async (req, res, next) => {
   });
 });
 
+const getUserComments = catchAsync(async (req, res, next) => {
+  const features = new APIFeatures(
+    Comment.find({
+      author: req.user._id,
+    }),
+    req.query
+  )
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const comments = await features.query;
+
+  res.status(200).json({
+    status: 'success',
+    results: comments.length,
+    data: {
+      comments,
+    },
+  });
+});
+
 module.exports = {
   createComment,
   getAllComments,
@@ -148,4 +171,5 @@ module.exports = {
   getPostComments,
   updateComment,
   deleteComment,
+  getUserComments,
 };

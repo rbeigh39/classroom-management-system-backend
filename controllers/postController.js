@@ -3,6 +3,7 @@ const APIFeatures = require('../utilities/apiFeatures');
 const catchAsync = require('../utilities/catchAsync');
 const AppError = require('../utilities/appError');
 const Post = require('../models/postModel');
+const Like = require('../models/likeModel');
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -140,6 +141,70 @@ const deletePost = catchAsync(async (req, res, next) => {
   });
 });
 
+// --------------- FOR USER ROUTER
+const getUsersPosts = catchAsync(async (req, res, next) => {
+  const features = new APIFeatures(
+    Post.find({
+      author: req.user._id,
+    }).populate({
+      path: 'author',
+      select: ['name', 'photo'],
+    }),
+    req.query
+  )
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  // const posts = await Post.find({
+  //   author: req.user._id,
+  // }).populate({
+  //   path: 'author',
+  //   select: ['name', 'photo'],
+  // });
+
+  const posts = await features.query;
+
+  res.status(200).json({
+    status: 'success',
+    results: posts.length,
+    data: {
+      posts,
+    },
+  });
+});
+
+// const getUserLikedPosts = catchAsync(async (req, res, next) => {
+//   const posts = await Post.find({
+//     likes: { $in: [req.user._id] },
+//   });
+
+//   res.status(200).json({
+//     status: 'success',
+//     results: posts.length,
+//     data: {
+//       posts,
+//     },
+//   });
+// });
+
+// const getUserLikedPosts = catchAsync(async (req, res, next) => {
+//   const posts = await Like.find({
+//     user: req.user._id,
+//   })
+//     .populate('post')
+//     .select('post');
+
+//   res.status(200).json({
+//     status: 'success',
+//     results: posts.length,
+//     data: {
+//       posts,
+//     },
+//   });
+// });
+
 module.exports = {
   uploadPostPhoto,
   createPost,
@@ -147,4 +212,5 @@ module.exports = {
   getAllPosts,
   updatePost,
   deletePost,
+  getUsersPosts,
 };

@@ -1,5 +1,8 @@
 const express = require('express');
 const userController = require('./../controllers/userController');
+const postController = require('../controllers/postController');
+const likeController = require('../controllers/likeController');
+const commentController = require('../controllers/commentController');
 const authController = require('../controllers/authController');
 
 const router = express.Router();
@@ -27,6 +30,18 @@ router.patch(
   authController.protect,
   authController.updatePassword
 );
+
+router
+  .route('/posts')
+  .get(authController.protect, postController.getUsersPosts);
+
+router
+  .route('/likes')
+  .get(authController.protect, likeController.getUserLikedPosts);
+
+router
+  .route('/comments')
+  .get(authController.protect, commentController.getUserComments);
 
 router.use(authController.protect, authController.restrictTo('admin'));
 
