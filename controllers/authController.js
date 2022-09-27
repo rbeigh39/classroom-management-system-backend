@@ -89,7 +89,7 @@ const login = catchAsync(async (req, res, next) => {
 const logout = catchAsync(async (req, res, next) => {
   res.cookie('jwt', '');
 
-  res.status(statusCode).json({
+  res.status(204).json({
     status: 'success',
     message: 'logged out',
   });
