@@ -112,7 +112,6 @@ const getProfile = catchAsync(async (req, res, next) => {
 });
 
 const updateMe = catchAsync(async (req, res, next) => {
-  console.log(' from uc:', req.body);
   // 1. Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm)
     return next(
@@ -123,7 +122,7 @@ const updateMe = catchAsync(async (req, res, next) => {
     );
 
   // 2. Update user document
-  const filteredBody = filterObj(req.body, 'name', 'email', 'photo');
+  const filteredBody = filterObj(req.body, 'name', 'email', 'photo', 'tagLine');
 
   if (req.file) filteredBody.photo = req.file.filename;
 
