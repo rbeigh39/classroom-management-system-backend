@@ -46,8 +46,8 @@ const httpsServer =
   process.env.NODE_ENV === 'development' &&
   https.createServer(
     {
-      key: fs.readFileSync(`${__dirname}/cert/key.pem`, 'utf-8'),
-      cert: fs.readFileSync(`${__dirname}/cert/cert.pem`),
+      key: fs.readFileSync(`${__dirname}/cert/pubble.network.key`, 'utf-8'),
+      cert: fs.readFileSync(`${__dirname}/cert/pubble.network.crt`, 'utf-8'),
     },
     app
   );
