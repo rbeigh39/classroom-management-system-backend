@@ -37,6 +37,7 @@ app.use(
       'http://127.0.0.1:3001',
       'http://192.168.29.233:3000',
       'http://192.168.29.233:3001',
+      'https://classroom-management-system-react.vercel.app/',
       '*',
     ],
     credentials: true,
